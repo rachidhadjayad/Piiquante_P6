@@ -1,4 +1,3 @@
-// maj 10/10
 // on importe notre package bcrypt pour le hash
 const bcrypt = require('bcrypt');
 // on importe notre token

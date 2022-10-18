@@ -5,21 +5,21 @@ const Thing = require('../models/sauces');
 // pour intercepter les requêtes de la route POST
 
 exports.createThing = (req, res, next) => {
+  // On parse notre sauceObject pour otenir nos information sous forme de tableau 
+  const sauceObject = JSON.parse(req.body.sauce);
+  delete sauceObject._id;
+  delete sauceObject._userId;
+  
   const thing = new Thing({
-    userId: req.body.userId,
-    name: req.body.name,
-    manufacturer: req.body.manufacturer,
-    description: req.body.description,
-    mainPepper: req.body.mainPepper,
-    imageUrl: req.body.imageUrl,
-    heat: req.body.heat,
-    likes: req.body.likes,
-    dislikes: req.body.dislikes,
-    usersLiked: req.body.usersLiked,
-    usersDisliked: req.body.usersDisliked,
-    email: req.body.email,
-    password: req.body.password,
+    ...sauceObject, 
+    userId: sauceObject.userId,
+    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+    likes: 0,
+    dislikes: 0,
+    usersLiked:  [],
+    usersDisliked:  []
   });
+  
   thing.save().then(
     () => {
       res.status(201).json({
@@ -36,11 +36,12 @@ exports.createThing = (req, res, next) => {
 };
 
 exports.getOneThing = (req, res, next) => {
-// on utilise ensuite la méthode findOne() dans notre modèle Thing pour trouver le Thing unique ayant le même _id que le paramètre de la requête 
-  Thing.findOne({
+// On utilise ensuite la méthode findOne() dans notre modèle Thing pour trouver le Thing unique ayant le même _id que le paramètre de la requête 
+Thing.findOne({
     _id: req.params.id
   }).then(
     (thing) => {
+      console.log(thing);
       res.status(200).json(thing);
     }
   ).catch(
@@ -53,24 +54,13 @@ exports.getOneThing = (req, res, next) => {
 };
 
 exports.modifyThing = (req, res, next) => {
-  const thing = new Thing({
-    userId: req.body.userId,
-    name: req.body.name,
-    manufacturer: req.body.manufacturer,
-    description: req.body.description,
-    mainPepper: req.body.mainPepper,
-    imageUrl: req.body.imageUrl,
-    heat: req.body.heat,
-    likes: req.body.likes,
-    dislikes: req.body.dislikes,
-    usersLiked: req.body.usersLiked,
-    usersDisliked: req.body.usersDisliked,
-    email: req.body.email,
-    password: req.body.password,
-  });
+  const sauceObject = req.file ? { 
+    ...JSON.parse(req.body.sauce), 
+    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+} : { ...req.body }; 
   // la méthode updateOne() permet de mettre à jour notre modèle
   // on utilise deux-points : en face du segment dynamique de la route pour la rendre accessible en tant que paramètre
-  Thing.updateOne({_id: req.params.id}, thing).then(
+  Thing.updateOne({_id: req.params.id}, { ...sauceObject, _id: req.params.id }).then(
     () => {
       res.status(201).json({
         message: 'Thing updated successfully!'
@@ -114,3 +104,4 @@ exports.getAllThings = (req, res, next) => {
     }
   );
 };
+
