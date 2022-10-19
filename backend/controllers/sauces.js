@@ -1,8 +1,11 @@
-// création des routers
+// Création des routers
 
 const Thing = require('../models/sauces');
 
-// pour intercepter les requêtes de la route POST
+// Importation du module fs de node.js pour acceder aux fichiers du serveur
+const fs = require('fs');
+
+// Intercepter les requêtes de la route POST
 
 exports.createThing = (req, res, next) => {
   // On parse notre sauceObject pour otenir nos information sous forme de tableau 
@@ -58,8 +61,8 @@ exports.modifyThing = (req, res, next) => {
     ...JSON.parse(req.body.sauce), 
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
 } : { ...req.body }; 
-  // la méthode updateOne() permet de mettre à jour notre modèle
-  // on utilise deux-points : en face du segment dynamique de la route pour la rendre accessible en tant que paramètre
+  // La méthode updateOne() permet de mettre à jour notre modèle
+  // On utilise deux-points : en face du segment dynamique de la route pour la rendre accessible en tant que paramètre
   Thing.updateOne({_id: req.params.id}, { ...sauceObject, _id: req.params.id }).then(
     () => {
       res.status(201).json({

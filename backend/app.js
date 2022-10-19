@@ -1,13 +1,14 @@
 // Le node "path" fournit des utilitaires pour travailler avec les chemins de fichiers et de répertoires
 const path = require("path");
-// importation de express avec "require
+// Importation de express avec "require
 const express = require('express');
-// app qui sera notre application qui appelle la methode express
+// App qui sera notre application qui appelle la methode express
 const app = express();
-// ajout de la constante pour connecter notre API à notre cluster MongoDB
+// Ajout de la constante pour connecter notre API à notre cluster MongoDB
 const mongoose = require('mongoose');
-// importation de notre routeur 
+// Importation de notre routeur 
 const stuffRoutes = require('./routes/sauces');
+
 const userRoutes = require('./routes/user');
 
 
