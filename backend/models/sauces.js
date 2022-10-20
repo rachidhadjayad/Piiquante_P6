@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 // Plugin simple pour Mongoose, qui nettoie les champs du document avant de les enregistrer.
 const sanitizerPlugin = require('mongoose-sanitizer-plugin');
 
-// Notre Shema pour le Thing pour le pge du frontend
+// Notre Shema pour le Thing pour le page du frontend
 
 const thingSchema = mongoose.Schema({
   userId: { type: String, required: true },
@@ -22,5 +22,7 @@ const thingSchema = mongoose.Schema({
 });
 
 thingSchema.plugin(sanitizerPlugin);
+
+// On exporte notre Schema 
 
 module.exports = mongoose.model('Thing', thingSchema);

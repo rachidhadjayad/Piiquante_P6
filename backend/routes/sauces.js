@@ -21,8 +21,8 @@ router.post('/', auth,multer, stuffCtrl.createThing);
 router.get('/:id', auth, stuffCtrl.getOneThing);
 router.put('/:id', auth,multer, stuffCtrl.modifyThing);
 router.delete('/:id', auth, stuffCtrl.deleteThing);
-// partie Likes et Dislikes
-router.post('/:id/like', auth, like.likeThing);
+// Partie Likes et Dislikes
+router.post('/:id/like', auth,multer, like.likeThing);
 
 // On exporte notre routeur
 module.exports = router;
